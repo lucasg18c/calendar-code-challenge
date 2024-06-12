@@ -27,19 +27,62 @@ export default function CalendarAction(props: CalendarActionProps) {
     [props.action.scheduledDate]
   );
 
+  const isScheduled = useMemo(
+    () => !!props.action.scheduledDate,
+    [props.action.scheduledDate]
+  );
+
+  const statusText = useMemo(() => {
+    switch (props.action.status) {
+      case "Completed":
+        return "Completed";
+      case "Scheduled":
+        return `Scheduled ${props.action.arrivalStartWindow} - ${props.action.arrivalEndWindow}`;
+      default:
+        return "Scheduled date & time TBD";
+    }
+  }, [
+    props.action.status,
+    props.action.arrivalStartWindow,
+    props.action.arrivalEndWindow,
+  ]);
+
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-      <View style={{ flexDirection: "column", alignItems: "center" }}>
-        {!!date ? (
+    <View
+      style={{
+        flexDirection: "row",
+        gap: 10,
+        marginHorizontal: 16,
+      }}
+    >
+      <View
+        style={{
+          flexDirection: "column",
+          alignItems: "center",
+          width: 25,
+        }}
+      >
+        {isScheduled ? (
           <>
-            <Text style={{ fontSize: 20 }}>
+            <Text
+              style={{ fontSize: 9, fontWeight: "bold", color: "#00000099" }}
+            >
               {dayOfWeekMapping[date!.getDay()]}
             </Text>
-            <Text style={{ fontSize: 20 }}>{date.getDate()}</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                marginTop: 5,
+                marginBottom: 7.8,
+              }}
+            >
+              {date!.getDate()}
+            </Text>
             <StatusIcon status={props.action.status as ActionStatus} />
           </>
         ) : (
-          <Text style={{ fontSize: 20 }}>TBD</Text>
+          <Text style={{ fontSize: 9, fontWeight: "bold" }}>TBD</Text>
         )}
       </View>
 
@@ -48,31 +91,52 @@ export default function CalendarAction(props: CalendarActionProps) {
           flex: 1,
           flexDirection: "column",
           paddingHorizontal: 16,
-          paddingVertical: 9,
-          backgroundColor: statusColorMapping[props.action.status!],
+          paddingTop: 9,
+          paddingBottom: 14,
+          backgroundColor:
+            statusColorMapping[props.action.status ?? "Unscheduled"],
+          borderRadius: 4,
+          gap: 1,
         }}
       >
-        <Text style={{ fontSize: 16, color: ThemeColors.white }}>
+        <Text
+          style={{ fontSize: 16, color: ThemeColors.white, fontWeight: "bold" }}
+        >
           {props.action.name}
         </Text>
         {props.action.vendor && (
           <>
-            <Text style={{ fontSize: 14, color: ThemeColors.white }}>
+            <Text style={{ fontSize: 12, color: ThemeColors.white }}>
               {props.action.vendor.vendorName}
             </Text>
-            <Text style={{ fontSize: 14, color: ThemeColors.white }}>
+            <Text
+              style={{
+                fontSize: 12,
+                color: ThemeColors.white,
+                fontWeight: "bold",
+              }}
+            >
               {props.action.vendor.phoneNumber}
             </Text>
           </>
         )}
 
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <MapPinIcon color={ThemeColors.white} />
-          <Text style={{ fontSize: 14, color: ThemeColors.white }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 9,
+            gap: 4,
+          }}
+        >
+          <MapPinIcon color={ThemeColors.white} size={10} />
+          <Text style={{ fontSize: 12, color: ThemeColors.white }}>
             {props.customer.street}
           </Text>
         </View>
-        <Text style={{ fontSize: 14, color: ThemeColors.white }}></Text>
+        <Text style={{ fontSize: 12, color: ThemeColors.white }}>
+          {statusText}
+        </Text>
       </View>
     </View>
   );
