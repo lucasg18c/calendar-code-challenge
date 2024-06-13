@@ -1,10 +1,10 @@
 import { View, Text, SafeAreaView, StatusBar, TextInput } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useCalendar } from "@/contexts/calendar";
 import MonthTitle from "@/components/MonthTitle";
 import FormInput from "@/components/FormInput";
-import { Action } from "../models/ChallengeData";
+import { Action, Customer } from "../models/ChallengeData";
 import Title from "@/components/Title";
 import AppButton from "@/components/AppButton";
 import { calendarService } from "@/services/calendar-service";
@@ -14,24 +14,32 @@ export default function ActionDetailsScreen() {
     actionId: string;
   }>();
   const { calendar, setCalendar } = useCalendar();
+
+  const findActionById = useCallback(
+    (id: string) => {
+      if (!calendar) return;
+
+      return calendar.calendar
+        .flatMap((i) => i.actions)
+        .find((i) => i.id === id);
+    },
+    [calendar]
+  );
+
   const action = useMemo(() => {
     if (!calendar || !actionId) return;
 
-    return calendar.calendar
-      .flatMap((i) => i.actions)
-      .find((i) => i.id === actionId);
+    return findActionById(actionId);
   }, [calendar, actionId]);
 
   const handleChange = async (updatedAction: UpdateActionForm) => {
-    if (!calendar) return;
+    if (!calendar || !actionId) return;
 
     const _calendar = { ...calendar };
     const copy = JSON.parse(JSON.stringify(_calendar));
 
     try {
-      const _action = _calendar.calendar
-        .flatMap((i) => i.actions)
-        .find((i) => i.id === actionId);
+      const _action = findActionById(actionId);
 
       if (!_action) return;
 
@@ -47,7 +55,13 @@ export default function ActionDetailsScreen() {
 
   return (
     <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
-      {action && <ActionDetails action={action} onSave={handleChange} />}
+      {action && calendar?.customer && (
+        <ActionDetails
+          action={action}
+          onSave={handleChange}
+          customer={calendar!.customer}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -58,10 +72,11 @@ type UpdateActionForm = {
 
 type ActionDetailsProps = {
   action: Action;
+  customer: Customer;
   onSave?: (form: UpdateActionForm) => void | Promise<void>;
 };
 
-function ActionDetails({ action, onSave }: ActionDetailsProps) {
+function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
   const [serviceName, setServiceName] = useState(action.name);
 
   const date = useMemo(() => {
@@ -69,6 +84,10 @@ function ActionDetails({ action, onSave }: ActionDetailsProps) {
 
     return new Date(action.scheduledDate);
   }, [action]);
+
+  const addressLine2 = useMemo(() => {
+    return `${customer.city}, ${customer.state} ${customer.zip}`;
+  }, [customer]);
 
   useEffect(() => {
     if (!action) return;
@@ -108,13 +127,14 @@ function ActionDetails({ action, onSave }: ActionDetailsProps) {
 
       <View style={{ gap: 5, marginTop: 17 }}>
         <Title>Address</Title>
-        <Text></Text>
-        <Text></Text>
+        <Text>{customer.street}</Text>
+        <Text>{addressLine2}</Text>
       </View>
 
       <AppButton
         title="SAVE CHANGES"
         onPress={() => onSave && onSave({ name: serviceName })}
+        style={{ marginTop: 29 }}
       />
     </View>
   );
