@@ -4,7 +4,7 @@ import CalendarView from "@/components/CalendarView";
 import { calendarService } from "@/services/calendar-service";
 import { useCalendar } from "@/contexts/calendar";
 
-export default function Calendar() {
+export default function CalendarScreen() {
   const { calendar, setCalendar } = useCalendar();
   const [isLoading, setIsLoading] = useState(false); // this could be replaced with React Query
 
