@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { ActionStatus } from "@/app/models/ChallengeData";
 import { ClockIcon } from "react-native-heroicons/outline";

@@ -4,7 +4,7 @@ import { mockedCalendar } from "@/mock/calendar";
 
 const client = axiosClient.interview;
 
-const USE_MOCK = false;
+const USE_MOCK = true;
 
 export const calendarService = {
   getCalendar: async () => {

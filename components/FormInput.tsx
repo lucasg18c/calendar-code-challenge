@@ -1,12 +1,12 @@
-import { View, Text, TextInput, StyleProp, ViewStyle } from "react-native";
+import { View, TextInput, StyleProp, ViewStyle } from "react-native";
 import React from "react";
 import Title from "./Title";
 
 export type FormInputProps = {
   label: string;
   value: string;
-  onChangeText?: (text: string) => void;
   style?: StyleProp<ViewStyle>;
+  onChangeText?: (text: string) => void;
 };
 
 export default function FormInput(props: FormInputProps) {

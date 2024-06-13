@@ -1,4 +1,4 @@
-import { View, Text, ViewStyle, StyleProp } from "react-native";
+import { View, ViewStyle, StyleProp } from "react-native";
 import React, { useMemo } from "react";
 import MonthTitle from "./MonthTitle";
 import { Calendar } from "@/app/models/ChallengeData";

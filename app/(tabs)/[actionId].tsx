@@ -1,13 +1,6 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useCalendar } from "@/contexts/calendar";
 import MonthTitle from "@/components/MonthTitle";
 import FormInput from "@/components/FormInput";

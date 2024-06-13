@@ -1,8 +1,7 @@
 import { View, FlatList } from "react-native";
-import React, { useMemo } from "react";
+import React from "react";
 import { ChallengeData } from "@/app/models/ChallengeData";
 import CalendarItem from "./CalendarItem";
-import MonthTitle from "./MonthTitle";
 import CalendarItemSeparator from "./CalendarItemSeparator";
 
 export type CalendarViewProps = {
@@ -10,7 +9,6 @@ export type CalendarViewProps = {
 };
 
 export default function CalendarView(props: CalendarViewProps) {
-  const date = useMemo(() => new Date(), []);
   return (
     <FlatList
       data={props.data.calendar}
