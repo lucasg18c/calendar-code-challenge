@@ -104,9 +104,23 @@ function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
           justifyContent: "space-between",
         }}
       >
-        <MonthTitle date={date!} showDay />
+        {date ? (
+          <MonthTitle date={date} showDay />
+        ) : (
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "bold",
+              color: "#000000CC",
+            }}
+          >
+            TBD
+          </Text>
+        )}
         <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-          {action.status}
+          {action.status && action.status !== "Unscheduled"
+            ? action.status
+            : "Schedule date & time TBD"}
         </Text>
       </View>
 
