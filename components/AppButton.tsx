@@ -5,6 +5,7 @@ import { useColor } from "@/hooks/useColor";
 export type AppButtonProps = {
   title: string;
   style?: StyleProp<ViewStyle>;
+  disabled?: boolean;
   onPress?: () => void | Promise<void>;
 };
 
@@ -13,10 +14,11 @@ export default function AppButton(props: AppButtonProps) {
 
   return (
     <TouchableOpacity
+      disabled={props.disabled}
       onPress={props.onPress}
       style={[
         {
-          backgroundColor: colors.primary,
+          backgroundColor: props.disabled ? colors.disabled : colors.primary,
           borderRadius: 50,
           height: 43,
           justifyContent: "center",
@@ -26,7 +28,11 @@ export default function AppButton(props: AppButtonProps) {
       ]}
     >
       <Text
-        style={{ color: colors.onPrimary, fontSize: 16, fontWeight: "bold" }}
+        style={{
+          color: props.disabled ? colors.onDisabled : colors.onPrimary,
+          fontSize: 16,
+          fontWeight: "bold",
+        }}
       >
         {props.title}
       </Text>

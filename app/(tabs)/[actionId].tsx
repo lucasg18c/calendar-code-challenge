@@ -1,4 +1,11 @@
-import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  Alert,
+} from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useCalendar } from "@/contexts/calendar";
@@ -15,6 +22,7 @@ export default function ActionDetailsScreen() {
     actionId: string;
   }>();
   const { calendar, setCalendar } = useCalendar();
+  const [isLoading, setIsLoading] = useState(false); // this could be replaced with React Query
 
   const findActionById = useCallback(
     (id: string) => {
@@ -33,8 +41,10 @@ export default function ActionDetailsScreen() {
     return findActionById(actionId);
   }, [calendar, actionId]);
 
-  const handleChange = async (updatedAction: UpdateActionForm) => {
-    if (!calendar || !actionId) return;
+  const handleSaveChanges = async (updatedAction: UpdateActionForm) => {
+    if (!calendar || !actionId || isLoading) return;
+
+    setIsLoading(true);
 
     const _calendar = { ...calendar };
     const copy = JSON.parse(JSON.stringify(_calendar));
@@ -51,6 +61,9 @@ export default function ActionDetailsScreen() {
     } catch (e) {
       console.log(e);
       setCalendar(copy);
+      Alert.alert("Error", "There was an error saving changes"); // TODO: replace with toast
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,8 +73,9 @@ export default function ActionDetailsScreen() {
         {action && calendar?.customer && (
           <ActionDetails
             action={action}
-            onSave={handleChange}
+            onSave={handleSaveChanges}
             customer={calendar!.customer}
+            isLoading={isLoading}
           />
         )}
       </ScrollView>
@@ -76,10 +90,16 @@ type UpdateActionForm = {
 type ActionDetailsProps = {
   action: Action;
   customer: Customer;
+  isLoading?: boolean;
   onSave?: (form: UpdateActionForm) => void | Promise<void>;
 };
 
-function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
+function ActionDetails({
+  action,
+  customer,
+  isLoading,
+  onSave,
+}: ActionDetailsProps) {
   const colors = useColor();
 
   const [serviceName, setServiceName] = useState(action.name);
@@ -155,9 +175,10 @@ function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
       </View>
 
       <AppButton
-        title="SAVE CHANGES"
+        title={isLoading ? "Saving..." : "SAVE CHANGES"}
         onPress={() => onSave && onSave({ name: serviceName })}
         style={{ marginTop: 29 }}
+        disabled={isLoading}
       />
     </View>
   );
