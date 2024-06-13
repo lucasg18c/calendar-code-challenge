@@ -13,7 +13,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: true,
       }}
-      // sceneContainerStyle={{ backgroundColor: "#fff" }}
     >
       <Tabs.Screen
         name="index"
@@ -23,7 +22,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => <CalendarIcon color={color} />,
         }}
       />
-      <Tabs.Screen name="[actionId]" options={{ headerTitle: "Details" }} />
+      <Tabs.Screen
+        name="[actionId]"
+        options={{
+          headerTitle: "Details",
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
     </Tabs>
   );
 }

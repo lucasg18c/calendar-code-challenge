@@ -14,6 +14,8 @@ export default function CalendarView(props: CalendarViewProps) {
   return (
     <FlatList
       data={props.data.calendar}
+      overScrollMode="never"
+      ListFooterComponent={<View style={{ height: 20 }} />}
       CellRendererComponent={({ item, index, children }) => (
         <CalendarItemSeparator
           key={index}

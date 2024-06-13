@@ -1,4 +1,11 @@
-import { View, Text, SafeAreaView, StatusBar, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StatusBar,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useCalendar } from "@/contexts/calendar";
@@ -55,13 +62,15 @@ export default function ActionDetailsScreen() {
 
   return (
     <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
-      {action && calendar?.customer && (
-        <ActionDetails
-          action={action}
-          onSave={handleChange}
-          customer={calendar!.customer}
-        />
-      )}
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+        {action && calendar?.customer && (
+          <ActionDetails
+            action={action}
+            onSave={handleChange}
+            customer={calendar!.customer}
+          />
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }

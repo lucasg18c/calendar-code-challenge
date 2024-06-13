@@ -11,7 +11,6 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import CalendarContextProvider from "@/contexts/calendar/CalendarContextProvider";
-import { Text } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,18 +36,6 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="action/[id]"
-            options={{
-              headerTitle: "Action",
-              header: () => <Text>Action</Text>,
-            }}
-          />
-
-          {/* <Stack.Screen
-            name="/calendar/action/[actionId]"
-            options={{ headerTitle: "Action", headerShown: false }}
-          /> */}
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>
