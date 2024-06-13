@@ -3,8 +3,9 @@ import React, { useMemo } from "react";
 import { Action, ActionStatus, Customer } from "@/app/models/ChallengeData";
 import StatusIcon from "./StatusIcon";
 import { MapPinIcon } from "react-native-heroicons/solid";
-import { ThemeColors } from "@/constants/Colors";
 import { Link } from "expo-router";
+import { useColor } from "@/hooks/useColor";
+import { Colors } from "@/constants/Colors";
 
 export type CalendarActionProps = {
   action: Action;
@@ -14,12 +15,13 @@ export type CalendarActionProps = {
 const dayOfWeekMapping = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 const statusColorMapping: Record<ActionStatus, string> = {
-  Completed: "#00B47D",
-  Scheduled: "#006A4B",
-  Unscheduled: "#011638",
+  Completed: Colors.light.primary,
+  Scheduled: Colors.light.primaryDark,
+  Unscheduled: Colors.light.secondary,
 };
 
 export default function CalendarAction(props: CalendarActionProps) {
+  const colors = useColor();
   const date = useMemo(
     () =>
       !!props.action.scheduledDate
@@ -66,7 +68,11 @@ export default function CalendarAction(props: CalendarActionProps) {
         {isScheduled ? (
           <>
             <Text
-              style={{ fontSize: 9, fontWeight: "bold", color: "#00000099" }}
+              style={{
+                fontSize: 9,
+                fontWeight: "bold",
+                color: colors.subtitle,
+              }}
             >
               {dayOfWeekMapping[date!.getDay()]}
             </Text>
@@ -76,6 +82,7 @@ export default function CalendarAction(props: CalendarActionProps) {
                 fontWeight: "bold",
                 marginTop: 5,
                 marginBottom: 7.8,
+                color: colors.title,
               }}
             >
               {date!.getDate()}
@@ -83,7 +90,11 @@ export default function CalendarAction(props: CalendarActionProps) {
             <StatusIcon status={props.action.status as ActionStatus} />
           </>
         ) : (
-          <Text style={{ fontSize: 9, fontWeight: "bold" }}>TBD</Text>
+          <Text
+            style={{ fontSize: 9, fontWeight: "bold", color: colors.subtitle }}
+          >
+            TBD
+          </Text>
         )}
       </View>
 
@@ -111,7 +122,7 @@ export default function CalendarAction(props: CalendarActionProps) {
           <Text
             style={{
               fontSize: 16,
-              color: ThemeColors.white,
+              color: colors.onPrimary,
               fontWeight: "bold",
             }}
           >
@@ -119,13 +130,13 @@ export default function CalendarAction(props: CalendarActionProps) {
           </Text>
           {props.action.vendor && (
             <>
-              <Text style={{ fontSize: 12, color: ThemeColors.white }}>
+              <Text style={{ fontSize: 12, color: colors.onPrimary }}>
                 {props.action.vendor.vendorName}
               </Text>
               <Text
                 style={{
                   fontSize: 12,
-                  color: ThemeColors.white,
+                  color: colors.onPrimary,
                   fontWeight: "bold",
                 }}
               >
@@ -142,12 +153,12 @@ export default function CalendarAction(props: CalendarActionProps) {
               gap: 4,
             }}
           >
-            <MapPinIcon color={ThemeColors.white} size={10} />
-            <Text style={{ fontSize: 12, color: ThemeColors.white }}>
+            <MapPinIcon color={colors.onPrimary} size={10} />
+            <Text style={{ fontSize: 12, color: colors.onPrimary }}>
               {props.customer.street}
             </Text>
           </View>
-          <Text style={{ fontSize: 12, color: ThemeColors.white }}>
+          <Text style={{ fontSize: 12, color: colors.onPrimary }}>
             {statusText}
           </Text>
         </View>

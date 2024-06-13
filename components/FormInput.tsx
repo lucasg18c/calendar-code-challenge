@@ -1,6 +1,7 @@
 import { View, TextInput, StyleProp, ViewStyle } from "react-native";
 import React from "react";
 import Title from "./Title";
+import { useColor } from "@/hooks/useColor";
 
 export type FormInputProps = {
   label: string;
@@ -10,6 +11,8 @@ export type FormInputProps = {
 };
 
 export default function FormInput(props: FormInputProps) {
+  const colors = useColor();
+
   return (
     <View style={[props.style, { gap: 7 }]}>
       <Title>{props.label}</Title>
@@ -19,12 +22,13 @@ export default function FormInput(props: FormInputProps) {
         style={{
           paddingHorizontal: 16,
           paddingVertical: 12,
-          backgroundColor: "#F3F3F3",
-          borderColor: "#E9E9E9",
+          backgroundColor: colors.surface,
+          borderColor: colors.surfaceOutline,
           borderWidth: 1,
           borderRadius: 4,
           flexDirection: "row",
           alignItems: "center",
+          color: colors.onSurface,
         }}
       />
     </View>

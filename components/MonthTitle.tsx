@@ -1,6 +1,7 @@
 import { Text, StyleProp, TextStyle } from "react-native";
 import React, { useMemo } from "react";
 import { formatDate } from "@/libs/format";
+import { useColor } from "@/hooks/useColor";
 
 export type MonthTitleProps = {
   date: Date;
@@ -9,6 +10,8 @@ export type MonthTitleProps = {
 };
 
 export default function MonthTitle(props: MonthTitleProps) {
+  const colors = useColor();
+
   const title = useMemo(
     () => formatDate(props.date, props.showDay),
     [props.date, props.showDay]
@@ -21,7 +24,7 @@ export default function MonthTitle(props: MonthTitleProps) {
         {
           fontSize: 16,
           fontWeight: "bold",
-          color: "#000000CC",
+          color: colors.subtitle,
         },
       ]}
     >

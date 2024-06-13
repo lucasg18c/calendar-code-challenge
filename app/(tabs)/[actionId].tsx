@@ -8,6 +8,7 @@ import { Action, Customer } from "../models/ChallengeData";
 import Title from "@/components/Title";
 import AppButton from "@/components/AppButton";
 import { calendarService } from "@/services/calendar-service";
+import { useColor } from "@/hooks/useColor";
 
 export default function ActionDetailsScreen() {
   const { actionId } = useLocalSearchParams<{
@@ -79,6 +80,8 @@ type ActionDetailsProps = {
 };
 
 function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
+  const colors = useColor();
+
   const [serviceName, setServiceName] = useState(action.name);
 
   const date = useMemo(() => {
@@ -113,13 +116,13 @@ function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
             style={{
               fontSize: 16,
               fontWeight: "bold",
-              color: "#000000CC",
+              color: colors.subtitle,
             }}
           >
             TBD
           </Text>
         )}
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+        <Text style={{ fontWeight: "bold", fontSize: 16, color: colors.title }}>
           {action.status && action.status !== "Unscheduled"
             ? action.status
             : "Schedule date & time TBD"}
@@ -136,15 +139,19 @@ function ActionDetails({ action, customer, onSave }: ActionDetailsProps) {
       {action.vendor && (
         <View style={{ gap: 5, marginTop: 21 }}>
           <Title>Provided by</Title>
-          <Text>{action.vendor?.vendorName}</Text>
-          <Text style={{ color: "#00B47D" }}>{action.vendor?.phoneNumber}</Text>
+          <Text style={{ color: colors.onBackground }}>
+            {action.vendor?.vendorName}
+          </Text>
+          <Text style={{ color: colors.primary }}>
+            {action.vendor?.phoneNumber}
+          </Text>
         </View>
       )}
 
       <View style={{ gap: 5, marginTop: 17 }}>
         <Title>Address</Title>
-        <Text>{customer.street}</Text>
-        <Text>{addressLine2}</Text>
+        <Text style={{ color: colors.onBackground }}>{customer.street}</Text>
+        <Text style={{ color: colors.onBackground }}>{addressLine2}</Text>
       </View>
 
       <AppButton

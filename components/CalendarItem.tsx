@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React, { useMemo } from "react";
 import { Calendar, Customer } from "@/app/models/ChallengeData";
 import CalendarAction from "./CalendarAction";
-import { ThemeColors } from "@/constants/Colors";
+import { useColor } from "@/hooks/useColor";
 
 export type CalendarItemProps = {
   calendar: Calendar;
@@ -10,6 +10,8 @@ export type CalendarItemProps = {
 };
 
 export default function CalendarItem(props: CalendarItemProps) {
+  const colors = useColor();
+
   const actions = useMemo(() => {
     if (!props.calendar.actions.length) {
       return [];
@@ -45,7 +47,7 @@ export default function CalendarItem(props: CalendarItemProps) {
       ) : (
         <View
           style={{
-            backgroundColor: "#848FA5",
+            backgroundColor: colors.disabled,
             borderRadius: 4,
             marginStart: 48,
             marginEnd: 16,
@@ -56,7 +58,7 @@ export default function CalendarItem(props: CalendarItemProps) {
           <Text
             style={{
               fontSize: 16,
-              color: ThemeColors.white,
+              color: colors.onDisabled,
               fontWeight: "bold",
             }}
           >
