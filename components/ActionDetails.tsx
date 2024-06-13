@@ -1,11 +1,14 @@
 import { Action, Customer } from "@/app/models/ChallengeData";
 import { useColor } from "@/hooks/useColor";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Text, View } from "react-native";
 import MonthTitle from "./MonthTitle";
 import FormInput from "./FormInput";
 import Title from "./Title";
 import AppButton from "./AppButton";
+
+const MIN_NAME_LENGTH = 3;
+const MAX_NAME_LENGTH = 100;
 
 export type UpdateActionForm = {
   name: string;
@@ -27,6 +30,7 @@ export default function ActionDetails({
   const colors = useColor();
 
   const [serviceName, setServiceName] = useState(action.name);
+  const [error, setError] = useState<string>();
 
   const date = useMemo(() => {
     if (!action?.scheduledDate) return;
@@ -37,6 +41,25 @@ export default function ActionDetails({
   const addressLine2 = useMemo(() => {
     return `${customer.city}, ${customer.state} ${customer.zip}`;
   }, [customer]);
+
+  const handleSaveChanges = () => {
+    if (!onSave) return;
+
+    if (serviceName.trim().length < MIN_NAME_LENGTH) {
+      setError(`At least ${MIN_NAME_LENGTH} characters`);
+      return;
+    }
+
+    onSave({ name: serviceName });
+  };
+
+  useEffect(() => {
+    setError(undefined);
+  }, [serviceName]);
+
+  useEffect(() => {
+    setServiceName(action.name);
+  }, [action]);
 
   return (
     <View style={{ marginHorizontal: 16 }}>
@@ -72,6 +95,8 @@ export default function ActionDetails({
         value={serviceName}
         onChangeText={setServiceName}
         style={{ marginTop: 23 }}
+        error={error}
+        maxLength={MAX_NAME_LENGTH}
       />
 
       {action.vendor && (
@@ -94,7 +119,7 @@ export default function ActionDetails({
 
       <AppButton
         title={isLoading ? "Saving..." : "SAVE CHANGES"}
-        onPress={() => onSave && onSave({ name: serviceName })}
+        onPress={handleSaveChanges}
         style={{ marginTop: 29 }}
         disabled={isLoading}
       />

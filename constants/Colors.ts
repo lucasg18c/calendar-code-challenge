@@ -27,6 +27,7 @@ export const Colors = {
     surface: "#F3F3F3",
     surfaceOutline: "#E9E9E9",
     onSurface: "#333",
+    error: "#DC1010",
   },
   dark: {
     text: "#ECEDEE",
@@ -48,5 +49,6 @@ export const Colors = {
     surface: "#222526",
     surfaceOutline: "#292D2F",
     onSurface: "#fff",
+    error: "#DC1010",
   },
 };
