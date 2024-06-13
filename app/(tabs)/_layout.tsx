@@ -11,16 +11,19 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
+        headerShown: true,
       }}
+      // sceneContainerStyle={{ backgroundColor: "#fff" }}
     >
       <Tabs.Screen
         name="index"
         options={{
+          title: "Calendar",
           headerTitle: "Calendar",
           tabBarIcon: ({ color, focused }) => <CalendarIcon color={color} />,
         }}
       />
+      <Tabs.Screen name="[actionId]" options={{ headerTitle: "Details" }} />
     </Tabs>
   );
 }

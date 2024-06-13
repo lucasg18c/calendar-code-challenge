@@ -4,6 +4,7 @@ import { Action, ActionStatus, Customer } from "@/app/models/ChallengeData";
 import StatusIcon from "./StatusIcon";
 import { MapPinIcon } from "react-native-heroicons/solid";
 import { ThemeColors } from "@/constants/Colors";
+import { Link } from "expo-router";
 
 export type CalendarActionProps = {
   action: Action;
@@ -86,58 +87,71 @@ export default function CalendarAction(props: CalendarActionProps) {
         )}
       </View>
 
-      <View
+      <Link
+        href={{
+          pathname: "[actionId]",
+          params: { actionId: props.action.id },
+        }}
         style={{
           flex: 1,
-          flexDirection: "column",
           paddingHorizontal: 16,
           paddingTop: 9,
           paddingBottom: 14,
           backgroundColor:
             statusColorMapping[props.action.status ?? "Unscheduled"],
           borderRadius: 4,
-          gap: 1,
         }}
       >
-        <Text
-          style={{ fontSize: 16, color: ThemeColors.white, fontWeight: "bold" }}
-        >
-          {props.action.name}
-        </Text>
-        {props.action.vendor && (
-          <>
-            <Text style={{ fontSize: 12, color: ThemeColors.white }}>
-              {props.action.vendor.vendorName}
-            </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: ThemeColors.white,
-                fontWeight: "bold",
-              }}
-            >
-              {props.action.vendor.phoneNumber}
-            </Text>
-          </>
-        )}
-
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 9,
-            gap: 4,
+            gap: 1,
+            flexDirection: "column",
           }}
         >
-          <MapPinIcon color={ThemeColors.white} size={10} />
+          <Text
+            style={{
+              fontSize: 16,
+              color: ThemeColors.white,
+              fontWeight: "bold",
+            }}
+          >
+            {props.action.name}
+          </Text>
+          {props.action.vendor && (
+            <>
+              <Text style={{ fontSize: 12, color: ThemeColors.white }}>
+                {props.action.vendor.vendorName}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: ThemeColors.white,
+                  fontWeight: "bold",
+                }}
+              >
+                {props.action.vendor.phoneNumber}
+              </Text>
+            </>
+          )}
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 9,
+              gap: 4,
+            }}
+          >
+            <MapPinIcon color={ThemeColors.white} size={10} />
+            <Text style={{ fontSize: 12, color: ThemeColors.white }}>
+              {props.customer.street}
+            </Text>
+          </View>
           <Text style={{ fontSize: 12, color: ThemeColors.white }}>
-            {props.customer.street}
+            {statusText}
           </Text>
         </View>
-        <Text style={{ fontSize: 12, color: ThemeColors.white }}>
-          {statusText}
-        </Text>
-      </View>
+      </Link>
     </View>
   );
 }

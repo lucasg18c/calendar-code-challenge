@@ -1,17 +1,15 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SafeAreaView, StatusBar, Text } from "react-native";
-import { ChallengeData } from "../models/ChallengeData";
 import CalendarView from "@/components/CalendarView";
+import { calendarService } from "@/services/calendar-service";
+import { useCalendar } from "@/contexts/calendar";
 
 export default function Calendar() {
-  const [data, setData] = useState<ChallengeData>();
+  const { calendar, setCalendar } = useCalendar();
 
   const fetchCalendar = async () => {
-    const response = await axios.get<ChallengeData>(
-      "https://xjvq5wtiye.execute-api.us-east-1.amazonaws.com/interview/api/v1/challenge"
-    );
-    setData(response.data);
+    const response = await calendarService.getCalendar();
+    setCalendar(response.data);
   };
 
   useEffect(() => {
@@ -20,7 +18,7 @@ export default function Calendar() {
 
   return (
     <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
-      {!!data ? <CalendarView data={data} /> : <Text>Loading...</Text>}
+      {!!calendar ? <CalendarView data={calendar} /> : <Text>Loading...</Text>}
     </SafeAreaView>
   );
 }

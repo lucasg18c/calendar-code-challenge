@@ -1,39 +1,27 @@
-import { View, Text, FlatList } from "react-native";
-import React from "react";
+import { View, FlatList } from "react-native";
+import React, { useMemo } from "react";
 import { ChallengeData } from "@/app/models/ChallengeData";
 import CalendarItem from "./CalendarItem";
+import MonthTitle from "./MonthTitle";
+import CalendarItemSeparator from "./CalendarItemSeparator";
 
 export type CalendarViewProps = {
   data: ChallengeData;
 };
 
-function formatDateToMonthYear(date: Date): string {
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-  };
-  return date.toLocaleDateString("en-US", options);
-}
-
 export default function CalendarView(props: CalendarViewProps) {
+  const date = useMemo(() => new Date(), []);
   return (
     <FlatList
       data={props.data.calendar}
       CellRendererComponent={({ item, index, children }) => (
-        <View key={index} style={{ marginTop: 20 }}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "bold",
-              marginStart: 15,
-              marginBottom: 21,
-              color: "#000000CC",
-            }}
-          >
-            {formatDateToMonthYear(new Date(item.year, item.month, 1))}
-          </Text>
+        <CalendarItemSeparator
+          key={index}
+          item={item}
+          style={{ marginTop: index > 0 ? 20 : 0 }}
+        >
           {children}
-        </View>
+        </CalendarItemSeparator>
       )}
       renderItem={({ item, index }) => (
         <CalendarItem
