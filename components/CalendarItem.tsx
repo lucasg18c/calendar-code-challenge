@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useMemo } from "react";
 import { Calendar, Customer } from "@/app/models/ChallengeData";
 import CalendarAction from "./CalendarAction";
 import { ThemeColors } from "@/constants/Colors";
@@ -10,10 +10,36 @@ export type CalendarItemProps = {
 };
 
 export default function CalendarItem(props: CalendarItemProps) {
+  const actions = useMemo(() => {
+    if (!props.calendar.actions.length) {
+      return [];
+    }
+
+    // get unscheduled actions
+    const unscheduledActions = props.calendar.actions.filter(
+      (action) => !action.scheduledDate
+    );
+
+    // get scheduled actions
+    const scheduledActions = props.calendar.actions.filter(
+      (action) => !!action.scheduledDate
+    );
+
+    // order scheduled actions by date
+    const sortedScheduledActions = scheduledActions.sort((a, b) => {
+      return (
+        new Date(a.scheduledDate!).getTime() -
+        new Date(b.scheduledDate!).getTime()
+      );
+    });
+
+    return [...sortedScheduledActions, ...unscheduledActions];
+  }, [props.calendar.actions]);
+
   return (
     <View style={{ gap: 4 }}>
-      {props.calendar.actions.length ? (
-        props.calendar.actions.map((action, key) => (
+      {actions.length ? (
+        actions.map((action, key) => (
           <CalendarAction key={key} action={action} customer={props.customer} />
         ))
       ) : (
