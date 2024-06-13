@@ -24,7 +24,7 @@ export default function MonthTitle(props: MonthTitleProps) {
         {
           fontSize: 16,
           fontWeight: "bold",
-          color: colors.subtitle,
+          color: colors.title,
         },
       ]}
     >
