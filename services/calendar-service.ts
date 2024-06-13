@@ -4,15 +4,17 @@ import { mockedCalendar } from "@/mock/calendar";
 
 const client = axiosClient.interview;
 
-const USE_MOCK = true;
+const USE_MOCK = false; // TODO: replace with env var, or remove mock at all
+
+const RESOURCE_URL = "/interview/api/v1/challenge";
 
 export const calendarService = {
   getCalendar: async () => {
     return USE_MOCK
       ? { data: mockedCalendar }
-      : client.get<ChallengeData>("/interview/api/v1/challenge");
+      : client.get<ChallengeData>(RESOURCE_URL);
   },
   updateCalendar: async (data: ChallengeData) => {
-    return client.post<ChallengeData>("/interview/api/v1/challenge", data);
+    return client.post<ChallengeData>(RESOURCE_URL, data);
   },
 };
